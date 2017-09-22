@@ -1,15 +1,15 @@
 FROM ubuntu:latest
 
+COPY /home /root
+
 RUN apt-get update && apt-get install -y \
     autofs \
     samba \
-    vim \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN echo '/mnt/iso_auto /etc/auto.isos --timeout=10' >> /etc/auto.master \
- && echo '*       -fstype=auto,loop,ro,uid=$USER            :/mnt/raw_iso/&.iso' > /etc/auto.isos
-
-COPY /home /root
+    && rm -rf /var/lib/apt/lists/* \
+    && echo '/mnt/iso_auto /etc/auto.isos --timeout=10' >> /etc/auto.master \
+    && echo '*       -fstype=auto,loop,ro,uid=$USER            :/mnt/raw_iso/&.iso' > /etc/auto.isos \
+    && chmod 755 /root/start.sh \
+    && chmod 755 /root/symblink_isos.sh
 
 VOLUME [ "/mnt/raw_iso" ]
 VOLUME [ "/etc/samba" ]
